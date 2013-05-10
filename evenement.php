@@ -6,9 +6,9 @@
 	}
 
 	$url="http://build.uitdatabank.be/api/event/" .$id. "?key=AEBA59E1-F80E-4EE2-AE7E-CEDD6A589CA9&format=json";
-		
+
 	$event = json_decode(file_get_contents($url));
-	
+
 ?>
 <!DOCTYPE html>
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
@@ -54,7 +54,7 @@
       <h3><?php echo $event->event->eventdetails->eventdetail->title; ?> <small>in <?php echo($city) ?></small></h3>
       			<p><?php echo $event->event->eventdetails->eventdetail->shortdescription; ?></p>
 			<?php 
-			
+
 			$images = $event->event->eventdetails->eventdetail->media->file; 
 			foreach($images as $image)
 			{
@@ -63,7 +63,7 @@
 					echo "<img src='" . $image->hlink . "' />";	
 				}
 			}
-			
+
 			?>
 
 
