@@ -1,22 +1,14 @@
 <?php
-	if(isset($_GET['category']))
+	$city = $_GET['city'];;
+	if(isset($_GET['id']))
 	{
-		$category = $_GET['category'];
-		$city = $_GET['city'];
-		$url = "http://build.uitdatabank.be/api/events/search?key=AEBA59E1-F80E-4EE2-AE7E-CEDD6A589CA9&city=" . $city ."&eventtype=" . $category . "&format=json";
-	 	$events = json_decode(file_get_contents($url));
-	}
-	else if(isset($_GET['city']))
-	{
-		$city = $_GET['city'];
-		$url = "http://build.uitdatabank.be/api/events/search?key=AEBA59E1-F80E-4EE2-AE7E-CEDD6A589CA9&city=" . $city . "&format=json";
-		$events = json_decode(file_get_contents($url));
-		$category = "Alle Evenementen";
-
-
+		$id = $_GET['id'];
 	}
 
-
+	$url="http://build.uitdatabank.be/api/event/" .$id. "?key=AEBA59E1-F80E-4EE2-AE7E-CEDD6A589CA9&format=json";
+		
+	$event = json_decode(file_get_contents($url));
+	
 ?>
 <!DOCTYPE html>
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
@@ -59,16 +51,22 @@
     <!-- This has been source ordered to come first in the markup (and on small devices) but to be to the right of the nav on larger screens -->
     <div class="large-9 push-3 columns">
       
-      <h3><?php echo($category) ?> <small>in <?php echo($city) ?></small></h3>
-      
-      <ul id="results">
-      	<?php
-	      	foreach($events as $e)
+      <h3><?php echo $event->event->eventdetails->eventdetail->title; ?> <small>in <?php echo($city) ?></small></h3>
+      			<p><?php echo $event->event->eventdetails->eventdetail->shortdescription; ?></p>
+			<?php 
+			
+			$images = $event->event->eventdetails->eventdetail->media->file; 
+			foreach($images as $image)
+			{
+				if($image->mediatype == "photo")
 				{
-					echo "<li><a href='evenement.php?city=" . $city . "&id=" . $e->cdbid . "'>" . $e->title . "</a></li>";
+					echo "<img src='" . $image->hlink . "' />";	
 				}
-		?>
-      </ul>
+			}
+			
+			?>
+
+
             
     </div>
     
@@ -78,8 +76,8 @@
     <div class="large-3 pull-9 columns">
         
       <ul class="side-nav">
-        <li><a href="?city=<?php echo($city); ?>&category=0.14.0.0.0" >Concert</a></li>
-        <li><a href="?city=<?php echo($city); ?>&category=Dansvoorstelling" >Dansvoorstelling</a></li>
+        <li><a href="evenementen.php?city=<?php echo($city); ?>&category=0.14.0.0.0" >Concert</a></li>
+        <li><a href="evenementen.php?city=<?php echo($city); ?>&category=Dansvoorstelling" >Dansvoorstelling</a></li>
       </ul>
         
     </div>
